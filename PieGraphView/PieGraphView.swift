@@ -8,10 +8,10 @@
 import Foundation
 import UIKit
 
-class PieGraphView: UIView {
+final class PieGraphView: UIView {
 
-    var params:[[String: Any]]!
-    var safetyAngle:CGFloat!
+    private var params:[[String: Any]]!
+    private var safetyAngle:CGFloat!
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -34,7 +34,7 @@ class PieGraphView: UIView {
         addSubview(label)
     }
 
-    @objc func update(link: AnyObject){
+    @objc private func update(link: AnyObject){
         let angle = CGFloat(Double.pi * 2.0 / 100.0) // 1 % の時の割合
         safetyAngle += angle
         if(safetyAngle > CGFloat(Double.pi * 2)) {
@@ -47,16 +47,12 @@ class PieGraphView: UIView {
 
     func startAnimating(){
         let displayLink = CADisplayLink(target: self, selector: #selector(update(link:)))
-        displayLink.add(to: RunLoop.current, forMode: RunLoop.Mode.common)
+        displayLink.add(to: .current, forMode: .common)
     }
 
-
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
-        // Drawing code
 
-        let context: CGContext = UIGraphicsGetCurrentContext()!
+        let context = UIGraphicsGetCurrentContext()!
         var x: CGFloat = rect.origin.x
         x += rect.size.width / 2 // 幅の半分
         var y: CGFloat = rect.origin.y
@@ -80,9 +76,8 @@ class PieGraphView: UIView {
 
             context.move(to: CGPoint(x: x, y: y))
             context.addArc(center: CGPoint(x: x, y: y), radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: false)
-//            context.addArc(center: CGPoint(x: x, y: y), radius: radius/2, startAngle: endAngle, endAngle: startAngle, clockwise: true)
+            context.addArc(center: CGPoint(x: x, y: y), radius: radius/2, startAngle: endAngle, endAngle: startAngle, clockwise: true)
             context.setFillColor(color.cgColor.components!)
-            context.closePath()
             context.fillPath()
             startAngle = endAngle
         }

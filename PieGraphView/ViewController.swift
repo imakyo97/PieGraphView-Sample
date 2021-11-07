@@ -7,8 +7,8 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    var graphView:PieGraphView!
+final class ViewController: UIViewController {
+    private var graphView:PieGraphView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         graphView.center = view.center
     }
 
-    @IBAction func start(sender: AnyObject) {
+    @IBAction private func start(sender: AnyObject) {
         graphView.startAnimating()
     }
 }
